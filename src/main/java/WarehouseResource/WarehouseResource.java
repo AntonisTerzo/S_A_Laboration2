@@ -10,6 +10,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @Path("/")
@@ -25,7 +26,7 @@ public class WarehouseResource {
     }
 
     @GET
-    @Path("/all-products")
+    @Path("/products")
     @Produces(MediaType.APPLICATION_JSON)
     public Response allProducts() {
         return Response.ok().entity(warehouseService.getAllProducts()).build();
@@ -41,7 +42,7 @@ public class WarehouseResource {
     }
 
     @GET
-    @Path("/all-products/{id}")
+    @Path("/products/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProductById(@PathParam("id") String id) {
         Optional<Product> product = warehouseService.getProductById(id);
@@ -51,5 +52,17 @@ public class WarehouseResource {
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
-
+    @GET
+    @Path("/products/categories/{category}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getProductsFromCategory(@PathParam("category") String categoryString) {
+            Category category = Category.valueOf(categoryString.toUpperCase());
+            List<Product> products = warehouseService.getProductsByCategory(category);
+            if (products.isEmpty()) {
+                return Response.status(Response.Status.NOT_FOUND)
+                               .entity("No products found for category: " + category)
+                               .build();
+            }
+            return Response.ok().entity(products).build();
+    }
 }

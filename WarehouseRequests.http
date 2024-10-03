@@ -1,18 +1,21 @@
 ### GET request to example server
-GET http://localhost:8080/S_A_Laboration2-1.0-SNAPSHOT/all-products
+GET http://localhost:8080/S_A_Laboration2-1.0-SNAPSHOT/products
 
 ###
 POST http://localhost:8080/S_A_Laboration2-1.0-SNAPSHOT/add-product
 Content-Type: application/json
 
 {
-  "id": "3",
+  "id": "2",
   "name": "Souvlaki",
-  "category": "FOOD",
+  "category": "TOYS",
   "rating": 10,
   "createdDate": "2024-10-02T11:59:00",
   "modifiedDate": "2024-10-03T11:59:00"
 }
 
 ###
-GET http://localhost:8080/S_A_Laboration2-1.0-SNAPSHOT/all-products/3
+GET http://localhost:8080/S_A_Laboration2-1.0-SNAPSHOT/products/3
+
+###
+GET http://localhost:8080/S_A_Laboration2-1.0-SNAPSHOT/products/categories/food
