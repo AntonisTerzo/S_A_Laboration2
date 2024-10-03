@@ -1,23 +1,22 @@
 package entities;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 
-public record Product(String id, String name, Category category, int rating, LocalDateTime createdDate, LocalDateTime modifiedDate) {
-    public Product {
-        if (id == null || id.isBlank()) {
-            throw new IllegalArgumentException("Id cannot be null or empty");
-        }
-        if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("Name cannot be null or empty");
-        }
-        if (rating < 0 || rating > 10) {
-            throw new IllegalArgumentException("Rating must be between 0 and 10");
-        }
-        if (createdDate == null) {
-            throw new IllegalArgumentException("Date cannot be null");
-        }
-        if (modifiedDate == null) {
-            modifiedDate = createdDate;
-        }
-    }
+public record Product(
+        @NotBlank(message = "Id cannot be empty or null")
+        String id,
+        @NotBlank(message = "Name cannot be empty or null")
+        String name,
+        Category category,
+        @Min(value = 0, message = "Rating should be over 0")
+        @Max(value = 10, message = "Rating should be max 10")
+        int rating,
+        @NotNull(message = "Date cannot be null")
+        LocalDateTime createdDate,
+        LocalDateTime modifiedDate) {
 }
