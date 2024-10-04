@@ -3,6 +3,7 @@ package WarehouseResource;
 import Service.WarehouseService;
 import entities.Category;
 import entities.Product;
+import interceptor.LogInfo;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
@@ -13,8 +14,14 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Path("/")
+@LogInfo
 public class WarehouseResource {
+    private static final Logger logger = LoggerFactory.getLogger(WarehouseResource.class);
+
     private WarehouseService warehouseService;
 
     public WarehouseResource() {
@@ -44,11 +51,12 @@ public class WarehouseResource {
     @GET
     @Path("/products/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProductById(@PathParam("id") String id) {
+    public Response getProductById(@PathParam("id") @Valid String id) {
         Optional<Product> product = warehouseService.getProductById(id);
         if (product.isPresent()) {
             return Response.ok().entity(product.get()).build();
         }
+        logger.error("Product with id {} is invalid.", id);
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
@@ -56,13 +64,14 @@ public class WarehouseResource {
     @Path("/products/categories/{category}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProductsFromCategory(@PathParam("category") String categoryString) {
-            Category category = Category.valueOf(categoryString.toUpperCase());
-            List<Product> products = warehouseService.getProductsByCategory(category);
-            if (products.isEmpty()) {
-                return Response.status(Response.Status.NOT_FOUND)
-                               .entity("No products found for category: " + category)
-                               .build();
-            }
-            return Response.ok().entity(products).build();
+        Category category = Category.valueOf(categoryString.toUpperCase());
+        List<Product> products = warehouseService.getProductsByCategory(category);
+        if (products.isEmpty()) {
+            logger.error("No products found for category {}", category);
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity("No products found for category: " + category)
+                    .build();
+        }
+        return Response.ok().entity(products).build();
     }
 }
