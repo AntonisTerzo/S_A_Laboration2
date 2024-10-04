@@ -17,6 +17,9 @@ public class WarehouseService {
     private final List<Product> products = new CopyOnWriteArrayList<>();
 
     public void addProduct(Product product) {
+        if (products.stream().anyMatch(p -> p.id().equals(product.id()))) {
+            throw new IllegalArgumentException("Product already exists");
+        }
         products.add(product);
     }
 
