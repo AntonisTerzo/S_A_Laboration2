@@ -56,14 +56,16 @@ public class WarehouseResource {
         if (product.isPresent()) {
             return Response.ok().entity(product.get()).build();
         }
-        logger.error("Product with id {} is invalid.", id);
-        return Response.status(Response.Status.NOT_FOUND).build();
+        logger.error("No Product with id {} is found.", id);
+        return Response.status(Response.Status.NOT_FOUND)
+                .entity("No product with this id is found: " + id)
+                .build();
     }
 
     @GET
     @Path("/products/categories/{category}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProductsFromCategory(@PathParam("category") String categoryString) {
+    public Response getProductsFromCategory(@PathParam("category") @Valid String categoryString) {
         Category category = Category.valueOf(categoryString.toUpperCase());
         List<Product> products = warehouseService.getProductsByCategory(category);
         if (products.isEmpty()) {

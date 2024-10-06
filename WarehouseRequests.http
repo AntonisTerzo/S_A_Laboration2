@@ -8,7 +8,7 @@ Content-Type: application/json
 {
   "id": "1",
   "name": "Souvlaki",
-  "category": "FOOD",
+  "category": "A",
   "rating": 10,
   "createdDate": "2024-10-02T11:59:00",
   "modifiedDate": "2024-10-03T11:59:00"
