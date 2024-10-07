@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import validation.ValidCategory;
 
 @Path("/")
 @LogInfo
@@ -65,7 +66,7 @@ public class WarehouseResource {
     @GET
     @Path("/products/categories/{category}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProductsFromCategory(@PathParam("category") @Valid String categoryString) {
+    public Response getProductsFromCategory(@PathParam("category")@ValidCategory String categoryString) {
         Category category = Category.valueOf(categoryString.toUpperCase());
         List<Product> products = warehouseService.getProductsByCategory(category);
         if (products.isEmpty()) {

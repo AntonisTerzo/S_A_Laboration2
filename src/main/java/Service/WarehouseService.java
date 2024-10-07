@@ -3,6 +3,8 @@ package Service;
 import entities.Category;
 import entities.Product;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.WebApplicationException;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -16,9 +18,9 @@ import java.util.stream.Collectors;
 public class WarehouseService {
     private final List<Product> products = new CopyOnWriteArrayList<>();
 
-    public void addProduct(Product product) {
+    public void addProduct(@Valid Product product) {
         if (products.stream().anyMatch(p -> p.id().equals(product.id()))) {
-            throw new IllegalArgumentException("Product already exists");
+            throw new WebApplicationException("Product already exists");
         }
         products.add(product);
     }
@@ -27,7 +29,7 @@ public class WarehouseService {
         return Collections.unmodifiableList(products);
     }
 
-    public Optional<Product> getProductById(String id) {
+    public Optional<Product> getProductById(@Valid String id) {
         return Collections.unmodifiableList(products)
                 .stream()
                 .filter(p -> p.id().equals(id))

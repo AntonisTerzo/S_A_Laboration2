@@ -1,12 +1,10 @@
 package entities;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
+//check how to have enum empty
 public record Product(
         @NotBlank(message = "Id cannot be empty or null")
         String id,
@@ -17,6 +15,9 @@ public record Product(
         @Max(value = 10, message = "Rating should be max 10")
         int rating,
         @NotNull(message = "Date cannot be null")
+        @PastOrPresent(message = "Date must be in the past or present. Not in the future")
         LocalDateTime createdDate,
+        @NotNull(message = "Modified date cannot be null")
+        @PastOrPresent(message = "Modified date must be in the past or present. Not in the future")
         LocalDateTime modifiedDate) {
 }
