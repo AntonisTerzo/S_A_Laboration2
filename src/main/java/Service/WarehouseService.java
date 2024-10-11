@@ -4,7 +4,6 @@ import entities.Category;
 import entities.Product;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.WebApplicationException;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -20,7 +19,7 @@ public class WarehouseService {
 
     public void addProduct(@Valid Product product) {
         if (products.stream().anyMatch(p -> p.id().equals(product.id()))) {
-            throw new WebApplicationException("Product already exists");
+            throw new IllegalArgumentException("Product already exists");
         }
         products.add(product);
     }
