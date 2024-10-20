@@ -24,17 +24,18 @@ jobs:
           java-version: '21'
           distribution: 'adopt'
           cache: 'maven'
+
+      - name: Build and test with maven
+        run: mvn -B clean package
+
+      - name: Run tests
+        run: mvn test
         
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        
-      - name: Build and test
-        uses: docker/build-push-action@v6
-        with:
-          target: test
-          load: true
           
       - name: Build and push
+        if: success()
         uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64,linux/arm64
