@@ -10,6 +10,7 @@ public record Product(
         String id,
         @NotBlank(message = "Name cannot be empty or null")
         String name,
+        @NotNull(message = "Category cannot be null")
         Category category,
         @Min(value = 0, message = "Rating should be over 0")
         @Max(value = 10, message = "Rating should be max 10")
